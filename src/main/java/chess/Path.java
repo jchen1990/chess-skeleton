@@ -1,8 +1,9 @@
 package chess;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
-public class Path {
+public class Path implements Iterable<Position>{
 	
 	private LinkedList<Position> positions;
 	
@@ -16,5 +17,9 @@ public class Path {
 	
 	public LinkedList<Position> getPositions(){
 		return positions;
+	}
+	
+	public Iterator<Position> iterator(){
+		return positions.iterator();
 	}
 }

@@ -1,8 +1,14 @@
 package chess;
 
-import chess.pieces.Piece;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.util.LinkedList;
+import java.util.Map.Entry;
 
-import java.io.*;
+import chess.pieces.Piece;
 
 /**
  * This class provides the basic CLI interface to the Chess game.
@@ -48,7 +54,15 @@ public class CLI {
 
         while (true) {
             showBoard();
-            writeOutput(gameState.getCurrentPlayer() + "'s Move");
+            GameStatus gameStatus = gameState.checkEndGame();
+            if(gameStatus.equals(GameStatus.Continue))
+            	writeOutput(gameState.getCurrentPlayer() + "'s Move");
+            else if(gameStatus.equals(GameStatus.Draw))
+            	writeOutput("Draw. Game Over");
+            else if(gameStatus.equals(GameStatus.Check))
+            	writeOutput("Check. " + gameState.getCurrentPlayer() + "'s Move");
+            else
+            	writeOutput("Checkmate. " + (gameState.getCurrentPlayer().equals(Player.White) ? Player.Black : Player.White) + " wins in " + gameState.getTurnCount() + " turns. Please start a new game.");
 
             String input = getInput();
             if (input == null) {
@@ -64,14 +78,32 @@ public class CLI {
                 } else if (input.equals("board")) {
                     writeOutput("Current Game:");
                 } else if (input.equals("list")) {
-                    writeOutput("====> List Is Not Implemented (yet) <====");
+                    list();
                 } else if (input.startsWith("move")) {
-                    writeOutput("====> Move Is Not Implemented (yet) <====");
+                	if(!gameStatus.equals(GameStatus.Checkmate)){
+	                	try{
+	                		if(!move(input.substring(5, 7), input.substring(8, 10)))
+	                    		writeOutput("Not a valid move.");
+	                	}catch(Exception E){
+	                		writeOutput("Not a valid move. Moves must take the form of \"move column-row column-row\"");
+	                	}
+                	}
+                    
                 } else {
                     writeOutput("I didn't understand that.  Type 'help' for a list of commands.");
                 }
             }
         }
+    }
+    
+    private void list(){
+    	for(Entry<Position, LinkedList<Position>> pieceMoves : gameState.getValidMovesFor(gameState.getCurrentPlayer()).entrySet()){
+    		writeOutput(pieceMoves.getKey() + " " + pieceMoves.getValue());
+    	}
+    }
+    
+    private boolean move(String from, String to){
+    	return gameState.movePiece(new Position(from), new Position(to));
     }
 
     private void doNewGame() {

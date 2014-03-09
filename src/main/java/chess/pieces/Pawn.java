@@ -1,6 +1,10 @@
 package chess.pieces;
 
+import java.util.LinkedList;
+
+import chess.Path;
 import chess.Player;
+import chess.Position;
 
 /**
  * The Pawn
@@ -14,4 +18,9 @@ public class Pawn extends Piece {
     protected char getIdentifyingCharacter() {
         return 'p';
     }
+
+	@Override
+	public LinkedList<Path> getMovePaths(Position currentPosition) {
+		return null;
+	}
 }

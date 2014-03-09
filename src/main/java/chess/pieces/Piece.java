@@ -1,6 +1,10 @@
 package chess.pieces;
 
+import java.util.LinkedList;
+
+import chess.Path;
 import chess.Player;
+import chess.Position;
 
 /**
  * A base class for chess pieces
@@ -26,4 +30,6 @@ public abstract class Piece {
     }
 
     protected abstract char getIdentifyingCharacter();
+    
+    public abstract LinkedList<Path> getMovePaths(Position currentPosition);
 }
