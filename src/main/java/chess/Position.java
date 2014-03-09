@@ -18,8 +18,15 @@ public class Position {
      * @param row The row
      */
     public Position(char column, int row) {
-        this.row = row;
-        this.column = column;
+    	if(MIN_ROW <= row && row <= MAX_ROW)
+    		this.row = row;
+    	else
+    		this.row = 0;
+    	
+    	if(MIN_COLUMN <= column && column <= MAX_COLUMN)
+    		this.column = column;
+    	else
+    		this.column = 0;
     }
 
     /**
